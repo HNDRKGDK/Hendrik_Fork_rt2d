@@ -53,6 +53,11 @@ void MyScene::update(float deltaTime)
 		myentity->scale = Point(1.0f, 1.0f);
 	}
 
+	// test
+	if (input()->getKeyDown(KeyCode::Left)) {
+		myentity->position += GL_SPOT_DIRECTION * deltaTime * 5.0f;
+	}
+
 	// ###############################################################
 	// Rotate color
 	// ###############################################################

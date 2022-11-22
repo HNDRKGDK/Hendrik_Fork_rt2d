@@ -15,6 +15,9 @@
 class MyEntity : public Entity
 {
 public:
+
+	//test vector right
+
 	/// @brief Constructor
 	MyEntity();
 	/// @brief Destructor
