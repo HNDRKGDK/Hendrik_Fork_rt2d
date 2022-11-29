@@ -6,8 +6,9 @@
 
 #include <fstream>
 #include <sstream>
-
 #include "myscene.h"
+
+using namespace std;
 
 MyScene::MyScene() : Scene()
 {
@@ -53,10 +54,47 @@ void MyScene::update(float deltaTime)
 		myentity->scale = Point(1.0f, 1.0f);
 	}
 
-	// test
-	if (input()->getKeyDown(KeyCode::Left)) {
-		myentity->position += GL_SPOT_DIRECTION * deltaTime * 5.0f;
-	}
+	//###############################################################
+    // Movement/Rotate test
+    // ###############################################################
+    int rotateSpeed = 5;
+	float moveSpeed = 500;
+
+    //Up
+    if (input()->getKey(KeyCode::W)) 
+    {
+        myentity->position.y -= moveSpeed * deltaTime;
+        // cout << "Up";
+    }
+    //Down
+    if (input()->getKey(KeyCode::S)) 
+    {
+        myentity->position.y += moveSpeed * deltaTime;
+        // cout << "Down";
+    }
+    //Right
+    if (input()->getKey(KeyCode::D)) 
+    {
+        myentity->position.x += moveSpeed * deltaTime;
+        // cout << "Right";
+    }
+    //Left
+    if (input()->getKey(KeyCode::A)) 
+    {
+        myentity->position.x -= moveSpeed * deltaTime;
+        // cout << "Left";
+    }
+
+	  if (input()->getKey(KeyCode::Left)) 
+    {
+        myentity->rotation.z -= rotateSpeed * deltaTime;
+        // cout << "Rotate Left";
+    }  if (input()->getKey(KeyCode::Right)) 
+    {
+        myentity->rotation.z += rotateSpeed * deltaTime;
+        // cout << "Rotate Right";
+    }
+
 
 	// ###############################################################
 	// Rotate color
