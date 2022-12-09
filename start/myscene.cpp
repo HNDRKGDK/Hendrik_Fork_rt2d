@@ -3,10 +3,14 @@
  *
  * Copyright 2015 Your Name <you@yourhost.com>
  */
+#include <iostream>
+#include <vector>
+#include <list>
 
 #include <fstream>
 #include <sstream>
 #include "myscene.h"
+#include "enemyBlock.h"
 
 using namespace std;
 
@@ -15,24 +19,27 @@ MyScene::MyScene() : Scene()
 	// start the timer.
 	t.start();
 
-	// create a single instance of MyEntity in the middle of the screen.
-	// the Sprite is added in Constructor of MyEntity.
-	myentity = new MyEntity();
-	myentity->position = Point2(SWIDTH/2, SHEIGHT/2);
+	// create single instance player.
+	player = new Player();
+	player->position = Point2(SWIDTH/2, SHEIGHT/1.1);
+
+	enemy = new EnemyBlock();
+	enemy->position = Point2(SWIDTH/2, SHEIGHT/2);
 
 	// create the scene 'tree'
-	// add myentity to this Scene as a child.
-	this->addChild(myentity);
+	// add player to this Scene as a child.
+	this->addChild(player);
+	this->addChild(enemy);
+
 }
 
 
 MyScene::~MyScene()
 {
 	// deconstruct and delete the Tree
-	this->removeChild(myentity);
-
-	// delete myentity from the heap (there was a 'new' in the constructor)
-	delete myentity;
+	this->removeChild(enemy);
+	this->removeChild(player);
+	//this->removeChild(bullet);
 }
 
 void MyScene::update(float deltaTime)
@@ -47,61 +54,81 @@ void MyScene::update(float deltaTime)
 	// ###############################################################
 	// Spacebar scales myentity
 	// ###############################################################
-	if (input()->getKeyDown(KeyCode::Space)) {
-		myentity->scale = Point(0.5f, 0.5f);
-	}
-	if (input()->getKeyUp(KeyCode::Space)) {
-		myentity->scale = Point(1.0f, 1.0f);
-	}
+	// if (input()->getKeyDown(KeyCode::Space)) {
+	// 	player->scale = Point(0.5f, 0.5f);
+	// }
+	// if (input()->getKeyUp(KeyCode::Space)) {
+	// 	player->scale = Point(1.0f, 1.0f);
+	// }
+
+	for (int i = player->bullets.size() - 1; i >= 0; i--) {
+        if (player->bullets[i]->position.x > SWIDTH || player->bullets[i]->position.x < 0 || player->bullets[i]->position.y < 0 || player->bullets[i]->position.y > SHEIGHT)
+        {
+            this->removeChild(player->bullets[i]);
+            delete player->bullets[i];
+            player->bullets.erase(player->bullets.begin() + i);
+            std::cout << "bullet deleted" << std::endl;
+        }
+    }
 
 	//###############################################################
-    // Movement/Rotate test
+    // Movement
     // ###############################################################
-    int rotateSpeed = 5;
-	float moveSpeed = 500;
+	
+	// if (input()->getKeyDown(KeyCode::Space)) {
 
-    //Up
-    if (input()->getKey(KeyCode::W)) 
+	// 	std::vector<Bullet*> bullets;
+	// 	Bullet* b = new Bullet(); // create a new Bullet on the heap
+	// 	bullets.push_back(b); // keep a pointer to that Bullet in our list
+	// 	i++;
+	// 	this->addChild(bullets[i]);
+	// 	bullets[i]->position = player->position;
+
+	// 	this->addChild(bullet);
+	// 	bullet->position = player->position;
+	// }
+
+	// preven leave the screen.
+	if (player -> position.x + player->sprite()->size.x /2 > SWIDTH)
     {
-        myentity->position.y -= moveSpeed * deltaTime;
-        // cout << "Up";
+        player->position.x += -1;
     }
-    //Down
-    if (input()->getKey(KeyCode::S)) 
+    if (player -> position.x - player->sprite()->size.x /2  < 0)
     {
-        myentity->position.y += moveSpeed * deltaTime;
-        // cout << "Down";
-    }
-    //Right
-    if (input()->getKey(KeyCode::D)) 
-    {
-        myentity->position.x += moveSpeed * deltaTime;
-        // cout << "Right";
-    }
-    //Left
-    if (input()->getKey(KeyCode::A)) 
-    {
-        myentity->position.x -= moveSpeed * deltaTime;
-        // cout << "Left";
+        player->position.x -= -1;
     }
 
-	  if (input()->getKey(KeyCode::Left)) 
+    //Y Axis
+    if (player -> position.y + player->sprite()->size.y /2 > SHEIGHT)
     {
-        myentity->rotation.z -= rotateSpeed * deltaTime;
-        // cout << "Rotate Left";
-    }  if (input()->getKey(KeyCode::Right)) 
-    {
-        myentity->rotation.z += rotateSpeed * deltaTime;
-        // cout << "Rotate Right";
+        player->position.y += -1;
     }
-
+    if (player -> position.y - player->sprite()->size.y /2  < 0)
+    {
+        player->position.y -= -1;
+    }
 
 	// ###############################################################
 	// Rotate color
 	// ###############################################################
-	if (t.seconds() > 0.0333f) {
-		RGBAColor color = myentity->sprite()->color;
-		myentity->sprite()->color = Color::rotate(color, 0.01f);
-		t.start();
-	}
+	// if (t.seconds() > 0.0333f) {
+	// 	RGBAColor color = myentity->sprite()->color;
+	// 	myentity->sprite()->color = Color::rotate(color, 0.01f);
+	// 	t.start();
+	// }
+	// ###############################################################
+	// Move to left to right ENEMY
+	// ###############################################################
+	enemy->position.x += enemySpeed * deltaTime;
+
+	if (enemy->position.x + enemy->sprite()->size.x /2 > SWIDTH)
+    {
+    	enemySpeed = -1 * enemySpeed;
+		//   cout << enemySpeed;
+
+    }
+    if (enemy-> position.x - enemy->sprite()->size.x /2  < 0)
+    {
+        enemySpeed = -1 * enemySpeed;
+    }
 }

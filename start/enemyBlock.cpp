@@ -4,20 +4,20 @@
  * Copyright 2015 Your Name <you@yourhost.com>
  */
 
-#include "myentity.h"
+#include "enemyblock.h"
 
-MyEntity::MyEntity() : Entity()
+EnemyBlock::EnemyBlock() : Entity()
 {
 	this->addSprite("assets/square1.tga");
-	this->sprite()->color = GREEN;
+	// this->sprite()->color = GREEN;
 }
 
-MyEntity::~MyEntity()
+EnemyBlock::~EnemyBlock()
 {
 
 }
 
-void MyEntity::update(float deltaTime)
+void EnemyBlock::update(float deltaTime)
 {
 	// ###############################################################
 	// Rotate
@@ -26,4 +26,6 @@ void MyEntity::update(float deltaTime)
 	// if (this->rotation.z > TWO_PI) {
 	// 	this->rotation.z -= TWO_PI;
 	// }
+	
+
 }

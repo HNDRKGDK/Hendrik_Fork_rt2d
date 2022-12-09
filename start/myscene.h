@@ -11,7 +11,10 @@
 
 #include <rt2d/scene.h>
 
-#include "myentity.h"
+#include "enemyblock.h"
+#include "player.h"
+#include "bullet.h"
+
 
 /// @brief The MyScene class is the Scene implementation.
 class MyScene : public Scene
@@ -27,9 +30,22 @@ public:
 	/// @return void
 	virtual void update(float deltaTime);
 
+	int enemySpeed = 200;
+
 private:
 	/// @brief the rotating square in the middle of the screen
-	MyEntity* myentity;
+	//MyEntity* myentity;
+	
+	//Declare player
+	Player* player;	
+	//Declare bullet
+	Bullet* bullet;
+
+	//declare enemy test
+	EnemyBlock* enemy;
+
+	// for bullet lists
+	Bullet* bullets;
 	/// @brief a Timer to rotate the color every n seconds
 	Timer t;
 };
