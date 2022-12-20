@@ -14,6 +14,7 @@
 #include "enemyblock.h"
 #include "player.h"
 #include "bullet.h"
+#include "shape.h"
 
 
 /// @brief The MyScene class is the Scene implementation.
@@ -39,15 +40,21 @@ private:
 	//Declare player
 	Player* player;	
 	//Declare bullet
-	Bullet* bullet;
 
 	//declare enemy test
 	EnemyBlock* enemy;
 
-	// for bullet lists
-	Bullet* bullets;
+	Bullet* bullet;
+
 	/// @brief a Timer to rotate the color every n seconds
 	Timer t;
+
+	// test squares
+	// Shape* square1;
+	// Shape* square2;
+	// Shape* circle1;
+	// Shape* circle2;
+	
 };
 
 #endif /* SCENE00_H */

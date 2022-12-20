@@ -10,6 +10,11 @@
 #define ENEMYBLOCK_H
 
 #include <rt2d/entity.h>
+#include "bullet.h"
+#include "collider.h"
+#include "shape.h"
+
+
 
 /// @brief The MyEntity class is the Entity implementation.
 class EnemyBlock : public Entity
@@ -28,9 +33,12 @@ public:
 	/// @return void
 	virtual void update(float deltaTime);
 
+	std::vector<Bullet*> enemybullets;
+
 private:
 	/* add your private declarations */
-	float enemySpeed;
+	Bullet* enemybullet;
+	Shape* enemycircle;
 };
 
 #endif /* MYENTITY_H */

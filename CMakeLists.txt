@@ -162,6 +162,10 @@ IF(MAKE_START)
 		start/player.h
 		start/bullet.cpp 
 		start/bullet.h
+		start/collider.h
+		start/shape.h
+		start/shape.cpp
+		
 	)
 	target_link_libraries(start
 		${ALL_GRAPHICS_LIBS}

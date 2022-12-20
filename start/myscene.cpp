@@ -11,6 +11,7 @@
 #include <sstream>
 #include "myscene.h"
 #include "enemyBlock.h"
+#include "collider.h"
 
 using namespace std;
 
@@ -24,13 +25,15 @@ MyScene::MyScene() : Scene()
 	player->position = Point2(SWIDTH/2, SHEIGHT/1.1);
 
 	enemy = new EnemyBlock();
-	enemy->position = Point2(SWIDTH/2, SHEIGHT/2);
+	enemy->position = Point2(SWIDTH/2, SHEIGHT/5);
+
+	// bSullet = new Bullet;
 
 	// create the scene 'tree'
 	// add player to this Scene as a child.
 	this->addChild(player);
 	this->addChild(enemy);
-
+	// this->addchild(bullet);
 }
 
 
@@ -39,11 +42,18 @@ MyScene::~MyScene()
 	// deconstruct and delete the Tree
 	this->removeChild(enemy);
 	this->removeChild(player);
-	//this->removeChild(bullet);
+
+	delete enemy;
+	delete player;
 }
 
 void MyScene::update(float deltaTime)
 {
+
+	// // check colliders against each other
+	// if( Collider::circle2circle(player.playercircle, bullet->bulletcircle) ) {
+	// 	bullet->bulletcircle->line()->color = RED;
+	// }
 	// ###############################################################
 	// Escape key stops the Scene
 	// ###############################################################
@@ -51,44 +61,29 @@ void MyScene::update(float deltaTime)
 		this->stop();
 	}
 
-	// ###############################################################
-	// Spacebar scales myentity
-	// ###############################################################
-	// if (input()->getKeyDown(KeyCode::Space)) {
-	// 	player->scale = Point(0.5f, 0.5f);
-	// }
-	// if (input()->getKeyUp(KeyCode::Space)) {
-	// 	player->scale = Point(1.0f, 1.0f);
-	// }
-
-	for (int i = player->bullets.size() - 1; i >= 0; i--) {
-        if (player->bullets[i]->position.x > SWIDTH || player->bullets[i]->position.x < 0 || player->bullets[i]->position.y < 0 || player->bullets[i]->position.y > SHEIGHT)
+	//Player bullet list
+	for (int i = player->playerbullets.size() - 1; i >= 0; i--) {
+        if (player->playerbullets[i]->position.x > SWIDTH || player->playerbullets[i]->position.x < 0 || player->playerbullets[i]->position.y < 0 || player->playerbullets[i]->position.y > SHEIGHT)
         {
-            this->removeChild(player->bullets[i]);
-            delete player->bullets[i];
-            player->bullets.erase(player->bullets.begin() + i);
-            std::cout << "bullet deleted" << std::endl;
+            this->removeChild(player->playerbullets[i]);
+            delete player->playerbullets[i];
+            player->playerbullets.erase(player->playerbullets.begin() + i);
+            std::cout << "player bullet deleted" << std::endl;
         }
-    }
+	}
 
-	//###############################################################
-    // Movement
-    // ###############################################################
-	
-	// if (input()->getKeyDown(KeyCode::Space)) {
+	//Enemy bullet list
+	for (int i = enemy->enemybullets.size() - 1; i >= 0; i--) {
+        if (enemy->enemybullets[i]->position.x > SWIDTH || enemy->enemybullets[i]->position.x < 0 || enemy->enemybullets[i]->position.y < 0 || enemy->enemybullets[i]->position.y > SHEIGHT)
+        {
+            this->removeChild(enemy->enemybullets[i]);
+            delete enemy->enemybullets[i];
+            enemy->enemybullets.erase(enemy->enemybullets.begin() + i);
+            std::cout << "player bullet deleted" << std::endl;
+        }
+	}
 
-	// 	std::vector<Bullet*> bullets;
-	// 	Bullet* b = new Bullet(); // create a new Bullet on the heap
-	// 	bullets.push_back(b); // keep a pointer to that Bullet in our list
-	// 	i++;
-	// 	this->addChild(bullets[i]);
-	// 	bullets[i]->position = player->position;
-
-	// 	this->addChild(bullet);
-	// 	bullet->position = player->position;
-	// }
-
-	// preven leave the screen.
+	// prevent player from leaving the screen
 	if (player -> position.x + player->sprite()->size.x /2 > SWIDTH)
     {
         player->position.x += -1;
@@ -108,23 +103,12 @@ void MyScene::update(float deltaTime)
         player->position.y -= -1;
     }
 
-	// ###############################################################
-	// Rotate color
-	// ###############################################################
-	// if (t.seconds() > 0.0333f) {
-	// 	RGBAColor color = myentity->sprite()->color;
-	// 	myentity->sprite()->color = Color::rotate(color, 0.01f);
-	// 	t.start();
-	// }
-	// ###############################################################
-	// Move to left to right ENEMY
-	// ###############################################################
+	
 	enemy->position.x += enemySpeed * deltaTime;
 
 	if (enemy->position.x + enemy->sprite()->size.x /2 > SWIDTH)
     {
     	enemySpeed = -1 * enemySpeed;
-		//   cout << enemySpeed;
 
     }
     if (enemy-> position.x - enemy->sprite()->size.x /2  < 0)

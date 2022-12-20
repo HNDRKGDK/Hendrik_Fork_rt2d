@@ -5,13 +5,25 @@
  */
 
 #include "bullet.h"
+#include "player.h" 
+#include "collider.h"
 
-Bullet::Bullet() : Entity()
+Bullet::Bullet(int s) : Entity()
 {
+	bulletSpeed = s;
 	this->addSprite("assets/bullet.tga");
 	// this->sprite()->color = RED;
+	// ddCircle(this->position.x, this->position.y, 32,WHITE);
 
-	bulletSpeed = 500;
+		// Circle1
+	bulletcircle = new Shape();
+	// circle1->position = Point2(400, 200);
+	Line bc1;
+	bc1.createCircle(64, 18);
+	bulletcircle->addLine(&bc1);
+	this->addChild(bulletcircle);
+
+		
 }
 
 Bullet::~Bullet()
@@ -21,5 +33,6 @@ Bullet::~Bullet()
 
 void Bullet::update(float deltaTime)
 {
-	this->position.y -= bulletSpeed * deltaTime;
+	Circle circ1 = Circle(this->position.x, this->position.y, 64);
+	this->position.y += bulletSpeed * deltaTime;
 }

@@ -10,6 +10,8 @@
 #define BULLET_H
 
 #include <rt2d/entity.h>
+#include "collider.h"
+#include "shape.h"
 
 /// @brief The MyEntity class is the Entity implementation.
 class Bullet: public Entity
@@ -17,9 +19,9 @@ class Bullet: public Entity
 public:
 
 	//test vector right
-
+	int bulletSpeed;
 	/// @brief Constructor
-	Bullet();
+	Bullet(int s);
 	/// @brief Destructor
 	virtual ~Bullet();
 
@@ -27,10 +29,14 @@ public:
 	/// @param deltaTime the elapsed time in seconds
 	/// @return void
 	virtual void update(float deltaTime);
+	std::vector<Bullet*> bullets;
+	Shape* bulletcircle;
 
+	
 private:
 	/* add your private declarations */
-	float bulletSpeed;
+	
+
 };
 
 #endif /* PLAYER_H */
